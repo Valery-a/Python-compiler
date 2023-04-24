@@ -60,3 +60,9 @@ class Parser:
                 result -= self.factor()
         return result
 
+class Compiler:
+    def compile(self, input):
+        lexer = Lexer(input)
+        parser = Parser(lexer)
+        result = parser.expr()
+        return result
