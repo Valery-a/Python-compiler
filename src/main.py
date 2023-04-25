@@ -1,3 +1,4 @@
+from typing import Any
 class Token:
     def __init__(self, type: str, value: any):
         self.type = type
@@ -63,11 +64,12 @@ class Parser:
 
 
 class Compiler:
-    def compile(self, input):
+    def compile(self, input: str) -> Any:
         lexer = Lexer(input)
         parser = Parser(lexer)
         result = parser.expr()
         return result
+
 
 compiler = Compiler()
 user_input = input("Enter an arithmetic expression: ")
