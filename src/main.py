@@ -32,17 +32,17 @@ class Lexer:
 
 
 class Parser:
-    def __init__(self, lexer):
+    def __init__(self, lexer: Lexer):
         self.lexer = lexer
         self.current_token = self.lexer.next_token()
     
-    def eat(self, token_type):
+    def eat(self, token_type: str) -> None:
         if self.current_token.type == token_type:
             self.current_token = self.lexer.next_token()
         else:
             raise Exception("Invalid syntax")
     
-    def factor(self):
+    def factor(self) -> int:
         token = self.current_token
         if token.type == "NUMBER":
             self.eat("NUMBER")
@@ -50,7 +50,7 @@ class Parser:
         else:
             raise Exception("Invalid syntax")
     
-    def expr(self):
+    def expr(self) -> int:
         result = self.factor()
         while self.current_token.type in ("PLUS", "MINUS"):
             if self.current_token.type == "PLUS":
@@ -60,6 +60,7 @@ class Parser:
                 self.eat("MINUS")
                 result -= self.factor()
         return result
+
 
 class Compiler:
     def compile(self, input):
