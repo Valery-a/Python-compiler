@@ -1,28 +1,44 @@
 from token import Token
 
 class Lexer:
-    def __init__(self, input: str):
-        self.input = input
-        self.pos = 0
+    def __init__(self, input_string: str):
+        self.input_string = input_string
+        self.position = 0
+        self.current_char = self.input_string[self.position] if self.position < len(self.input_string) else None
+        
+    def advance(self):
+        self.position += 1
+        self.current_char = self.input_string[self.position] if self.position < len(self.input_string) else None
     
-    def next_token(self) -> Token:
-        if self.pos >= len(self.input):
-            return Token("EOF", None)
+    def skip_whitespace(self):
+        while self.current_char is not None and self.current_char.isspace():
+            self.advance()
+            
+    def integer(self):
+        result = ''
+        while self.current_char is not None and self.current_char.isdigit():
+            result += self.current_char
+            self.advance()
+        return int(result)
+    
+    def get_next_token(self) -> Token:
+        while self.current_char is not None:
+            if self.current_char.isspace():
+                self.skip_whitespace()
+                continue
+            
+            if self.current_char.isdigit():
+                return Token('INTEGER', self.integer())
+            
+            operator_tokens = {
+                '+': Token('PLUS', '+'),
+                '-': Token('MINUS', '-'),
+            }
+            if self.current_char in operator_tokens:
+                token = operator_tokens[self.current_char]
+                self.advance()
+                return token
+            
+            raise ValueError('Invalid character: {}'.format(self.current_char))
         
-        if self.input[self.pos].isnumeric():
-            token_value = ""
-            while self.pos < len(self.input) and self.input[self.pos].isnumeric():
-                token_value += self.input[self.pos]
-                self.pos += 1
-            return Token("NUMBER", int(token_value))
-        
-        elif self.input[self.pos] == "+":
-            self.pos += 1
-            return Token("PLUS", "+")
-        
-        elif self.input[self.pos] == "-":
-            self.pos += 1
-            return Token("MINUS", "-")
-        
-        else:
-            raise Exception("Invalid input")
+        return Token('EOF', None)
