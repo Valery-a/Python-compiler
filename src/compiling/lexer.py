@@ -42,4 +42,3 @@ class Lexer:
             raise ValueError(f'Invalid character: {self.current_char}')
         
         return Token('EOF', None)
-

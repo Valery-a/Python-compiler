@@ -1,19 +1,20 @@
 from compiling.lexer import Lexer
 from compiling.parsing import Parser
+from compiling.token import Token
 
 
 class Compiler:
     def __init__(self):
         self.vars = {}
     
-    def compile(self, input: str) -> any:
-        lexer = Lexer(input)
+    def compile(self, input_string: str) -> any:
+        lexer = Lexer(input_string)
         parser = Parser(lexer)
         result = parser.expr()
         return result
     
-    def execute(self, input: str) -> any:
-        result = self.compile(input)
+    def execute(self, input_string: str) -> any:
+        result = self.compile(input_string)
         return self.interpret(result)
     
     def interpret(self, result: any) -> any:
@@ -31,4 +32,3 @@ class Compiler:
     
     def set_variable(self, var_name: str, value: int) -> None:
         self.vars[var_name] = value
-
