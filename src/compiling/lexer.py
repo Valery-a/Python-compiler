@@ -1,4 +1,4 @@
-from token import Token
+from compiling.token import Token
 
 class Lexer:
     def __init__(self, input_string: str):
@@ -39,6 +39,7 @@ class Lexer:
                 self.advance()
                 return token
             
-            raise ValueError('Invalid character: {}'.format(self.current_char))
+            raise ValueError(f'Invalid character: {self.current_char}')
         
         return Token('EOF', None)
+
